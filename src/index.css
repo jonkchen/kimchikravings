@@ -1,0 +1,263 @@
+/* Leaflet CSS - must be first */
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for the dashboard */
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200;
+  }
+  
+  .status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .status-blocked {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .status-completed {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .status-active {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  .status-pending {
+    @apply bg-gray-100 text-gray-800;
+  }
+}
+
+/* Mapbox GL CSS */
+.mapboxgl-map {
+  font-family: 'Inter', sans-serif;
+}
+
+.mapboxgl-popup-content {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal styles */
+.modal-overlay {
+  backdrop-filter: blur(4px);
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Modal z-index fixes */
+.modal-overlay {
+  backdrop-filter: blur(4px);
+  z-index: 50 !important;
+}
+
+.modal-content {
+  z-index: 51 !important;
+}
+
+/* Grayscale map filter */
+.grayscale-filter {
+  filter: grayscale(100%) contrast(120%) brightness(110%);
+}
+
+/* Leaflet z-index fixes */
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+.leaflet-control-container {
+  z-index: 2 !important;
+}
+
+.leaflet-control-zoom {
+  z-index: 2 !important;
+}
+
+/* When modal is open, hide map controls */
+body.modal-open .leaflet-control-container {
+  display: none !important;
+}
+
+/* Leaflet customizations */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 1000 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+.leaflet-control-zoom {
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.leaflet-control-zoom a {
+  border-radius: 0 !important;
+}
+
+.leaflet-control-zoom a:first-child {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+}
+
+.leaflet-control-zoom a:last-child {
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+}
+
+/* Pulsing route animation */
+@keyframes pulseRoute {
+  0% {
+    stroke-width: 4;
+    opacity: 0.8;
+  }
+  50% {
+    stroke-width: 8;
+    opacity: 1;
+  }
+  100% {
+    stroke-width: 4;
+    opacity: 0.8;
+  }
+}
+
+.leaflet-interactive.animate-pulse {
+  animation: pulseRoute 2s ease-in-out infinite;
+}
+
+/* Alternative dashed pulse animation */
+@keyframes dashPulse {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 20;
+  }
+}
+
+.leaflet-interactive.animate-dash {
+  stroke-dasharray: 15 10;
+  animation: dashPulse 1.5s linear infinite;
+  filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.5));
+}
+
+/* Uber/Lyft style flowing animation */
+@keyframes flowRoute {
+  0% {
+    stroke-dasharray: 0 100;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 20 80;
+    stroke-dashoffset: -20;
+  }
+  100% {
+    stroke-dasharray: 0 100;
+    stroke-dashoffset: -100;
+  }
+}
+
+.leaflet-interactive.animate-flow {
+  stroke-dasharray: 0 100;
+  animation: flowRoute 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.6));
+}
+
+/* Glowing effect for route */
+@keyframes glowRoute {
+  0% {
+    filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8));
+  }
+  100% {
+    filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.4));
+  }
+}
+
+.leaflet-interactive.animate-glow {
+  animation: glowRoute 2s ease-in-out infinite;
+}
+
+/* Ruby red route animations */
+@keyframes flowRouteRuby {
+  0% {
+    stroke-dasharray: 0 100;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 20 80;
+    stroke-dashoffset: -20;
+  }
+  100% {
+    stroke-dasharray: 0 100;
+    stroke-dashoffset: -100;
+  }
+}
+
+.leaflet-interactive.animate-flow-ruby {
+  stroke-dasharray: 0 100;
+  animation: flowRouteRuby 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 3px rgba(224, 17, 95, 0.6));
+}
+
+/* White glow animation for inner line */
+@keyframes glowWhite {
+  0% {
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.9));
+  }
+  100% {
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
+  }
+}
+
+.leaflet-interactive.animate-glow-white {
+  animation: glowWhite 2s ease-in-out infinite;
+}
