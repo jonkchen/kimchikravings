@@ -116,21 +116,56 @@ const App: React.FC = () => {
                 bg-white/80 dark:bg-dark-surface/80 
                 backdrop-blur-xl backdrop-saturate-150
                 border border-gray-200/50 dark:border-dark-border/50
-                rounded-3xl p-6 h-96 lg:h-[500px]
+                rounded-3xl p-6 h-96 lg:h-[600px]
                 shadow-xl dark:shadow-2xl
                 transition-all duration-500
                 hover:shadow-2xl dark:hover:shadow-3xl
                 animate-liquid
+                flex flex-col
               ">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-dark-text mb-4 transition-colors duration-300">
                   Location Overview
                 </h3>
-                <LeafletMapView
-                  currentLocation={dashboardData.currentLocation}
-                  selectedLocation={selectedAlternative}
-                  routeInfo={selectedAlternative?.routeInfo}
-                  className="h-full rounded-2xl overflow-hidden"
-                />
+                <div className="flex-1 min-h-0">
+                  <LeafletMapView
+                    currentLocation={dashboardData.currentLocation}
+                    selectedLocation={selectedAlternative}
+                    routeInfo={selectedAlternative?.routeInfo}
+                    className="h-full rounded-2xl overflow-hidden"
+                  />
+                </div>
+                
+                {/* Extended content area below map */}
+                <div className="mt-4 pt-4 border-t border-gray-200/30 dark:border-dark-border/30">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-100/80 dark:bg-blue-900/30 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                        <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <span className="text-gray-600 dark:text-dark-text-muted block text-xs">Current Location</span>
+                        <span className="font-medium text-gray-900 dark:text-dark-text text-sm">{dashboardData.currentLocation.name}</span>
+                      </div>
+                    </div>
+                    
+                    {selectedAlternative && (
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-green-100/80 dark:bg-green-900/30 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                          <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <span className="text-gray-600 dark:text-dark-text-muted block text-xs">Selected Location</span>
+                          <span className="font-medium text-gray-900 dark:text-dark-text text-sm">{selectedAlternative.name}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
