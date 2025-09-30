@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { AlternativeLocation, Location } from '../types';
 import { formatDistance, formatDuration } from '../lib/routing';
 import LeafletMapView from './LeafletMapView';
@@ -23,6 +23,10 @@ const AlternativesModal: React.FC<AlternativesModalProps> = ({
   onConfirmSelection
 }) => {
   const [isLoading] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [startX, setStartX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -43,6 +47,44 @@ const AlternativesModal: React.FC<AlternativesModalProps> = ({
       document.body.classList.remove('modal-open');
     };
   }, [isOpen, onClose]);
+
+  // Update selected alternative when currentIndex changes
+  useEffect(() => {
+    if (alternatives[currentIndex]) {
+      onSelectAlternative(alternatives[currentIndex]);
+    }
+  }, [currentIndex, alternatives, onSelectAlternative]);
+
+  // Touch gesture handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setStartX(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    
+    const endX = e.changedTouches[0].clientX;
+    const diffX = startX - endX;
+    const threshold = 50;
+
+    if (Math.abs(diffX) > threshold) {
+      if (diffX > 0 && currentIndex < alternatives.length - 1) {
+        // Swipe left - next option
+        setCurrentIndex(currentIndex + 1);
+      } else if (diffX < 0 && currentIndex > 0) {
+        // Swipe right - previous option
+        setCurrentIndex(currentIndex - 1);
+      }
+    }
+    
+    setIsDragging(false);
+  };
 
   const handleConfirm = () => {
     if (selectedAlternative) {
@@ -101,31 +143,149 @@ const AlternativesModal: React.FC<AlternativesModalProps> = ({
         </div>
 
         {/* Content */}
-        <div className="flex flex-col lg:flex-row h-[calc(90vh-120px)]">
-          {/* Map */}
-          <div className="lg:w-3/5 h-64 lg:h-full relative z-10">
-            <div className="h-full">
-              <LeafletMapView
-                currentLocation={currentLocation}
-                selectedLocation={selectedAlternative}
-                routeInfo={selectedAlternative?.routeInfo}
-                className="h-full"
-              />
+        <div className="relative h-[calc(90vh-120px)]">
+          {/* Map - Full background on mobile, side-by-side on desktop */}
+          <div className="absolute inset-0 lg:relative lg:w-3/5 lg:h-full">
+            <LeafletMapView
+              currentLocation={currentLocation}
+              selectedLocation={selectedAlternative}
+              routeInfo={selectedAlternative?.routeInfo}
+              className="h-full w-full"
+            />
+          </div>
+
+          {/* Mobile Overlay - Swipeable options */}
+          <div className="
+            lg:hidden
+            absolute bottom-0 left-0 right-0
+            bg-white/95 dark:bg-dark-surface/95
+            backdrop-blur-xl backdrop-saturate-150
+            border-t border-gray-200/50 dark:border-dark-border/50
+            rounded-t-3xl
+            shadow-2xl dark:shadow-3xl
+            transition-all duration-500
+            animate-liquid
+          ">
+            {/* Swipeable Content */}
+            <div 
+              ref={overlayRef}
+              className="relative overflow-hidden"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {/* Header */}
+              <div className="p-6 pb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-dark-text transition-colors duration-300">
+                    Alternative Locations
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-500 dark:text-dark-text-muted transition-colors duration-300">
+                      {currentIndex + 1} of {alternatives.length}
+                    </span>
+                    <div className="flex gap-1">
+                      {alternatives.map((_, index) => (
+                        <div
+                          key={index}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            index === currentIndex 
+                              ? 'bg-blue-500 dark:bg-blue-400' 
+                              : 'bg-gray-300 dark:bg-dark-border'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-dark-text-muted transition-colors duration-300">
+                  Swipe left or right to browse options
+                </p>
+              </div>
+
+              {/* Current Option Card */}
+              <div className="px-6 pb-6">
+                {alternatives[currentIndex] && (
+                  <div className="
+                    p-6 rounded-3xl border-2
+                    border-blue-500/70 dark:border-blue-400/70 
+                    bg-blue-50/80 dark:bg-blue-900/20 
+                    shadow-xl dark:shadow-2xl
+                    backdrop-blur-sm
+                    transition-all duration-300
+                    animate-glow
+                  ">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <h4 className="text-xl font-bold text-gray-900 dark:text-dark-text mb-2 transition-colors duration-300">
+                          {alternatives[currentIndex].name}
+                        </h4>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-dark-text-muted transition-colors duration-300">
+                          <span className="flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {alternatives[currentIndex].routeInfo ? formatDistance(alternatives[currentIndex].routeInfo!.distance) : 'N/A'}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {alternatives[currentIndex].routeInfo ? formatDuration(alternatives[currentIndex].routeInfo!.duration) : 'N/A'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-green-600 dark:text-green-400 transition-colors duration-300">
+                          {alternatives[currentIndex].revenueImpact}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-dark-text-muted transition-colors duration-300">
+                          daily revenue
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium text-green-600 dark:text-green-400 transition-colors duration-300">
+                          Available Now
+                        </span>
+                      </div>
+                      <button
+                        className="
+                          px-6 py-3 bg-blue-500 hover:bg-blue-600 
+                          dark:bg-blue-600 dark:hover:bg-blue-700
+                          text-white font-semibold rounded-2xl
+                          shadow-lg hover:shadow-xl
+                          transition-all duration-300
+                          transform hover:scale-105
+                          active:scale-95
+                        "
+                        onClick={handleConfirm}
+                      >
+                        Confirm Location
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Options List */}
+          {/* Desktop Sidebar - Hidden on mobile */}
           <div className="
-            lg:w-2/5 
-            border-l border-gray-200/50 dark:border-dark-border/50 
-            flex flex-col
-            backdrop-blur-sm
+            hidden lg:block
+            absolute top-0 right-0 w-2/5 h-full
+            bg-white/95 dark:bg-dark-surface/95
+            backdrop-blur-xl backdrop-saturate-150
+            border-l border-gray-200/50 dark:border-dark-border/50
+            shadow-2xl dark:shadow-3xl
+            transition-all duration-500
+            animate-liquid
           ">
-            <div className="
-              p-6 
-              border-b border-gray-200/50 dark:border-dark-border/50
-              backdrop-blur-sm
-            ">
+            <div className="p-6 border-b border-gray-200/50 dark:border-dark-border/50 backdrop-blur-sm">
               <h3 className="font-medium text-gray-900 dark:text-dark-text mb-2 transition-colors duration-300">
                 Select an alternative location:
               </h3>
@@ -134,7 +294,7 @@ const AlternativesModal: React.FC<AlternativesModalProps> = ({
               </p>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 overflow-y-auto custom-scrollbar h-[calc(100%-120px)]">
               <div className="p-6 space-y-4">
                 {alternatives.map((alternative) => (
                   <div
