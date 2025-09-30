@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Location, RouteInfo } from '../types';
@@ -11,6 +11,47 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
+
+// Animated Polyline Component
+interface AnimatedPolylineProps {
+  positions: [number, number][];
+  color: string;
+  weight: number;
+  opacity: number;
+  animationClass: string;
+}
+
+const AnimatedPolyline: React.FC<AnimatedPolylineProps> = ({
+  positions,
+  color,
+  weight,
+  opacity,
+  animationClass
+}) => {
+  const polylineRef = useRef<L.Polyline>(null);
+
+  useEffect(() => {
+    if (polylineRef.current) {
+      const element = polylineRef.current.getElement();
+      if (element) {
+        element.classList.add(animationClass);
+      }
+    }
+  }, [animationClass]);
+
+  return (
+    <Polyline
+      ref={polylineRef}
+      positions={positions}
+      color={color}
+      weight={weight}
+      opacity={opacity}
+      pathOptions={{
+        className: animationClass,
+      }}
+    />
+  );
+};
 
 // Custom markers
 const currentLocationIcon = new L.Icon({
@@ -139,27 +180,23 @@ const LeafletMapView: React.FC<LeafletMapViewProps> = ({
 
         {/* Route Line - Animated Flow */}
         {routeCoordinates && routeCoordinates.length > 1 && (
-          <Polyline
+          <AnimatedPolyline
             positions={routeCoordinates}
             color="#dc2626"
             weight={8}
             opacity={1.0}
-            pathOptions={{
-              className: 'animate-flow-ruby',
-            }}
+            animationClass="animate-flow-ruby"
           />
         )}
 
         {/* Route Line - Inner Highlight */}
         {routeCoordinates && routeCoordinates.length > 1 && (
-          <Polyline
+          <AnimatedPolyline
             positions={routeCoordinates}
             color="#ffffff"
             weight={4}
             opacity={0.9}
-            pathOptions={{
-              className: 'animate-glow-white',
-            }}
+            animationClass="animate-glow-white"
           />
         )}
 

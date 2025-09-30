@@ -239,10 +239,11 @@ body.modal-open .leaflet-control-container {
   }
 }
 
-.leaflet-interactive.animate-flow-ruby {
+.leaflet-interactive.animate-flow-ruby,
+.animate-flow-ruby {
   stroke-dasharray: 0 100;
   animation: flowRouteRuby 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 3px rgba(224, 17, 95, 0.6));
+  filter: drop-shadow(0 0 3px rgba(220, 38, 38, 0.6));
 }
 
 /* White glow animation for inner line */
@@ -258,6 +259,7 @@ body.modal-open .leaflet-control-container {
   }
 }
 
-.leaflet-interactive.animate-glow-white {
+.leaflet-interactive.animate-glow-white,
+.animate-glow-white {
   animation: glowWhite 2s ease-in-out infinite;
 }
