@@ -252,10 +252,10 @@ const AlternativesModal: React.FC<AlternativesModalProps> = ({
               </div>
 
               {/* Current Option Card */}
-              <div className="px-6 pb-6">
+              <div className="px-4 pb-3">
                 {alternatives[currentIndex] && (
                   <div className="
-                    p-6 rounded-3xl border-2
+                    p-3 rounded-xl border-2
                     border-blue-500/70 dark:border-blue-400/70 
                     bg-blue-50/80 dark:bg-blue-900/20 
                     shadow-xl dark:shadow-2xl
@@ -263,59 +263,52 @@ const AlternativesModal: React.FC<AlternativesModalProps> = ({
                     transition-all duration-300
                     animate-glow
                   ">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <h4 className="text-xl font-bold text-gray-900 dark:text-dark-text mb-2 transition-colors duration-300">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-bold text-gray-900 dark:text-dark-text mb-0.5 transition-colors duration-300 truncate">
                           {alternatives[currentIndex].name}
                         </h4>
-                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-dark-text-muted transition-colors duration-300">
-                          <span className="flex items-center gap-1">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-dark-text-muted transition-colors duration-300">
+                          <span className="flex items-center gap-0.5 whitespace-nowrap">
+                            <svg className="w-2.5 h-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                             {alternatives[currentIndex].routeInfo ? formatDistance(alternatives[currentIndex].routeInfo!.distance) : 'N/A'}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <span className="flex items-center gap-0.5 whitespace-nowrap">
+                            <svg className="w-2.5 h-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             {alternatives[currentIndex].routeInfo ? formatDuration(alternatives[currentIndex].routeInfo!.duration) : 'N/A'}
                           </span>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-green-600 dark:text-green-400 transition-colors duration-300">
+                      <div className="text-right flex-shrink-0 ml-2">
+                        <div className="text-base font-bold text-green-600 dark:text-green-400 transition-colors duration-300">
                           {alternatives[currentIndex].revenueImpact}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-dark-text-muted transition-colors duration-300">
-                          daily revenue
+                        <div className="text-xs text-gray-500 dark:text-dark-text-muted transition-colors duration-300 whitespace-nowrap">
+                          revenue
                         </div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-sm font-medium text-green-600 dark:text-green-400 transition-colors duration-300">
-                          Available Now
-                        </span>
-                      </div>
-                      <button
-                        className="
-                          px-6 py-3 bg-blue-500 hover:bg-blue-600 
-                          dark:bg-blue-600 dark:hover:bg-blue-700
-                          text-white font-semibold rounded-2xl
-                          shadow-lg hover:shadow-xl
-                          transition-all duration-300
-                          transform hover:scale-105
-                          active:scale-95
-                        "
-                        onClick={handleConfirm}
-                      >
-                        Confirm Location
-                      </button>
-                    </div>
+                    <button
+                      className="
+                        w-full
+                        py-2 bg-blue-500 hover:bg-blue-600 
+                        dark:bg-blue-600 dark:hover:bg-blue-700
+                        text-white font-semibold text-sm rounded-lg
+                        shadow-lg hover:shadow-xl
+                        transition-all duration-300
+                        transform hover:scale-105
+                        active:scale-95
+                      "
+                      onClick={handleConfirm}
+                    >
+                      Confirm Location
+                    </button>
                   </div>
                 )}
               </div>
