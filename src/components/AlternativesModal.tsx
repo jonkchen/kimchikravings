@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AlternativeLocation, RouteInfo } from '../types';
+import { AlternativeLocation, Location } from '../types';
 import { formatDistance, formatDuration } from '../lib/routing';
 import LeafletMapView from './LeafletMapView';
 
@@ -7,7 +7,7 @@ interface AlternativesModalProps {
   isOpen: boolean;
   onClose: () => void;
   alternatives: AlternativeLocation[];
-  currentLocation: { coords: [number, number] };
+  currentLocation: Location;
   selectedAlternative?: AlternativeLocation;
   onSelectAlternative: (alternative: AlternativeLocation) => void;
   onConfirmSelection: (alternative: AlternativeLocation) => void;
@@ -22,7 +22,7 @@ const AlternativesModal: React.FC<AlternativesModalProps> = ({
   onSelectAlternative,
   onConfirmSelection
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {

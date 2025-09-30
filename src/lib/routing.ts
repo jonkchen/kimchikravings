@@ -1,4 +1,4 @@
-import { RouteInfo, MapboxRouteResponse } from '../types';
+import { RouteInfo } from '../types';
 import { mockRouteData } from '../data/mockData';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -9,8 +9,7 @@ export const hasMapboxToken = (): boolean => {
 
 export const getRoute = async (
   fromCoords: [number, number],
-  toCoords: [number, number],
-  profile: 'driving' | 'driving-traffic' = 'driving'
+  toCoords: [number, number]
 ): Promise<RouteInfo | null> => {
   try {
     // Use OSRM (Open Source Routing Machine) - completely free
@@ -49,7 +48,7 @@ export const getRoute = async (
 const getMockRoute = (toCoords: [number, number]): RouteInfo | null => {
   // Find mock data based on destination coordinates
   const mockEntries = Object.entries(mockRouteData);
-  for (const [key, mockRoute] of mockEntries) {
+  for (const [, mockRoute] of mockEntries) {
     const mockCoords = mockRoute.geometry.coordinates[1];
     if (Math.abs(mockCoords[0] - toCoords[0]) < 0.01 && 
         Math.abs(mockCoords[1] - toCoords[1]) < 0.01) {
@@ -83,5 +82,6 @@ export const precomputeRoutes = async (
   toCoordsList: [number, number][]
 ): Promise<RouteInfo[]> => {
   const routePromises = toCoordsList.map(coords => getRoute(fromCoords, coords));
-  return Promise.all(routePromises);
+  const results = await Promise.all(routePromises);
+  return results.filter((route): route is RouteInfo => route !== null);
 };

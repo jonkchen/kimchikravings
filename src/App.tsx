@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AlternativeLocation, RouteInfo } from './types';
+import { AlternativeLocation } from './types';
 import { mockDashboardData } from './data/mockData';
 import { precomputeRoutes } from './lib/routing';
 import BlockedCard from './components/BlockedCard';

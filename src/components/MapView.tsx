@@ -44,7 +44,7 @@ const MapView: React.FC<MapViewProps> = ({
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
       // Add current location marker
-      const currentMarker = new mapboxgl.Marker({
+      new mapboxgl.Marker({
         color: '#3b82f6',
         scale: 1.2
       })

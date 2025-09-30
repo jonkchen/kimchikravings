@@ -56,7 +56,7 @@ const ConfirmationAnimation: React.FC<ConfirmationAnimationProps> = ({
     }
 
     let stepIndex = 0;
-    const totalDuration = steps.reduce((sum, step) => sum + step.duration, 0);
+    // const totalDuration = steps.reduce((sum, step) => sum + step.duration, 0);
     
     const startAnimation = () => {
       if (stepIndex >= steps.length) {
