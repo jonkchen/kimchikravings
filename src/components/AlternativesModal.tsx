@@ -171,7 +171,6 @@ const AlternativesModal: React.FC<AlternativesModalProps> = ({
             transition-all duration-500
             animate-liquid
             z-20
-            h-80
           ">
             {/* Swipeable Content */}
             <div 
