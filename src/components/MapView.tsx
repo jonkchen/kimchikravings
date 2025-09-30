@@ -72,15 +72,15 @@ const MapView: React.FC<MapViewProps> = ({
     // Add selected location marker
     if (selectedLocation) {
       const selectedMarker = new mapboxgl.Marker({
-        color: '#10b981',
+        color: '#8B0000',
         scale: 1.2
       })
         .setLngLat(selectedLocation.coords)
         .setPopup(new mapboxgl.Popup().setHTML(`
           <div class="p-2">
-            <h4 class="font-semibold text-green-600">${selectedLocation.name}</h4>
+            <h4 class="font-semibold text-red-600">${selectedLocation.name}</h4>
             <p class="text-sm text-gray-600">Selected Location</p>
-            ${selectedLocation.revenueImpact ? `<p class="text-sm text-green-600">${selectedLocation.revenueImpact}</p>` : ''}
+            ${selectedLocation.revenueImpact ? `<p class="text-sm text-red-600">${selectedLocation.revenueImpact}</p>` : ''}
           </div>
         `))
         .addTo(map.current);
@@ -133,7 +133,7 @@ const MapView: React.FC<MapViewProps> = ({
         'line-cap': 'round'
       },
       paint: {
-        'line-color': '#3b82f6',
+        'line-color': '#dc2626',
         'line-width': 4,
         'line-opacity': 0.8
       }
@@ -180,14 +180,14 @@ const MapView: React.FC<MapViewProps> = ({
             {selectedLocation && (
               <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-red-800 rounded-full"></div>
                   <span className="font-medium text-gray-900">Selected Location</span>
                 </div>
                 <p className="text-gray-600 text-sm mb-2">{selectedLocation.name}</p>
                 <p className="text-xs text-gray-500 mb-3">Coordinates: {selectedLocation.coords[1].toFixed(4)}, {selectedLocation.coords[0].toFixed(4)}</p>
                 {selectedLocation.revenueImpact && (
-                  <div className="bg-green-50 rounded p-2">
-                    <p className="text-green-700 text-sm font-medium">{selectedLocation.revenueImpact}</p>
+                  <div className="bg-red-50 rounded p-2">
+                    <p className="text-red-700 text-sm font-medium">{selectedLocation.revenueImpact}</p>
                   </div>
                 )}
               </div>

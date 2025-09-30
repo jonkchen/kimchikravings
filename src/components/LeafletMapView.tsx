@@ -27,7 +27,7 @@ const currentLocationIcon = new L.Icon({
 const selectedLocationIcon = new L.Icon({
   iconUrl: 'data:image/svg+xml;base64,' + btoa(`
     <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12.5 0C5.596 0 0 5.596 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.596 19.404 0 12.5 0zm0 19c-3.59 0-6.5-2.91-6.5-6.5S8.91 6 12.5 6 19 8.91 19 12.5 16.09 19 12.5 19z" fill="#10b981"/>
+      <path d="M12.5 0C5.596 0 0 5.596 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.596 19.404 0 12.5 0zm0 19c-3.59 0-6.5-2.91-6.5-6.5S8.91 6 12.5 6 19 8.91 19 12.5 16.09 19 12.5 19z" fill="#8B0000"/>
     </svg>
   `),
   iconSize: [25, 41],
@@ -114,10 +114,10 @@ const LeafletMapView: React.FC<LeafletMapViewProps> = ({
           >
             <Popup>
               <div className="p-2">
-                <h4 className="font-semibold text-green-600">{selectedLocation.name}</h4>
+                <h4 className="font-semibold text-red-600">{selectedLocation.name}</h4>
                 <p className="text-sm text-gray-600">Selected Location</p>
                 {selectedLocation.revenueImpact && (
-                  <p className="text-sm text-green-600 font-medium">{selectedLocation.revenueImpact}</p>
+                  <p className="text-sm text-red-600 font-medium">{selectedLocation.revenueImpact}</p>
                 )}
                 <p className="text-xs text-gray-500 mt-1">
                   {selectedLocation.coords[1].toFixed(4)}, {selectedLocation.coords[0].toFixed(4)}
@@ -131,7 +131,7 @@ const LeafletMapView: React.FC<LeafletMapViewProps> = ({
         {routeCoordinates && routeCoordinates.length > 1 && (
           <Polyline
             positions={routeCoordinates}
-            color="#e0115f"
+            color="#dc2626"
             weight={12}
             opacity={0.3}
           />
@@ -141,7 +141,7 @@ const LeafletMapView: React.FC<LeafletMapViewProps> = ({
         {routeCoordinates && routeCoordinates.length > 1 && (
           <Polyline
             positions={routeCoordinates}
-            color="#e0115f"
+            color="#dc2626"
             weight={8}
             opacity={1.0}
             pathOptions={{
